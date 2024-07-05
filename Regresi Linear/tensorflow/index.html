@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linear Regression with TensorFlow.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  </head>
+  <body>
+    <h1>Linear Regression Prediction</h1>
+    <p>Enter a value to predict:</p>
+    <input type="number" id="inputValue" placeholder="Enter a number" />
+    <button onclick="predict()">Predict</button>
+    <p id="output"></p>
+
+    <script>
+      let model;
+      async function loadModel() {
+        model = await tf.loadLayersModel(
+          "linear_regression_model_js/model.json"
+        );
+      }
+
+      async function predict() {
+        const inputValue = parseFloat(
+          document.getElementById("inputValue").value
+        );
+        const prediction = model.predict(tf.tensor2d([inputValue], [1, 1]));
+        const output = (await prediction.data())[0];
+        document.getElementById("output").innerText = `Prediction: ${output}`;
+      }
+
+      loadModel();
+    </script>
+  </body>
+</html>
